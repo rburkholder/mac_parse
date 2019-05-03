@@ -15,7 +15,6 @@
 #include <boost/spirit/include/qi_char.hpp>
 #include <boost/spirit/include/qi_lit.hpp>
 
-//#include <boost/spirit/include/phoenix_core.hpp>
 #include <boost/spirit/include/phoenix_operator.hpp>
 
 #define BOOST_SPIRIT_USE_PHOENIX_V3 1
@@ -23,12 +22,11 @@
 namespace {
 
 namespace qi = boost::spirit::qi;
-//namespace ascii = boost::spirit::ascii;
 namespace phoenix = boost::phoenix;
 
 //typedef uint8_t mac_t[ 6 ]; // has no operators
 //typedef std::array<uint8_t,6> mac_t;  // has no insert
-typedef std::vector<uint8_t> vMac_t;   // needs to be 6 == sizeof
+using vMac_t = std::vector<uint8_t>;   // needs to be 6 == sizeof
 
 template<typename Iterator>
 struct mac_parser_t: qi::grammar<Iterator, vMac_t()> {
@@ -67,12 +65,14 @@ int main( int argc, char** argv ) {
   vMac_t vResult;
   vResult.reserve( 6 );
 
-  typedef std::string::const_iterator iterator_type;
-  typedef mac_parser_t<iterator_type> mac_parser_string_t;
+  using iterator_type = std::string::const_iterator;
+  using mac_parser_string_t = mac_parser_t<iterator_type>;
+
   mac_parser_string_t parser;
 
   std::string::const_iterator iter = sMac.begin();
-  std::string::const_iterator end = sMac.end();
+  std::string::const_iterator end  = sMac.end();
+
   auto result = qi::parse( iter, end, parser, vResult );
 
   if ( iter == end ) std::cout << "full string matched" << std::endl;
